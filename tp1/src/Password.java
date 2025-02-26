@@ -99,9 +99,17 @@ public class Password {
      */
     public static HashMap<String, Boolean> checkPasswordsList(ArrayList<String> passwords) {
 
-        
+        HashMap<String, Boolean> password_map = new HashMap<>();
 
-        return null;
+        for (String password : passwords) {
+            if (isStrongPassword(password)) {
+                password_map.put(password, true);
+            } else {
+                password_map.put(password, false);
+            }
+        }
+
+        return password_map;
     }
 
     /**
