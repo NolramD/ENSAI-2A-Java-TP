@@ -1,6 +1,8 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,10 +128,36 @@ public class Password {
      */
     public static String generatePassword(int nbCar) {
 
-        // Code here
+        if (nbCar < 4) {
+            return null;
+        }
+        
+        StringBuilder password = new StringBuilder();
 
-        return null;
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        String special = "!@#$%^&*()_+";
+        String allcars = uppercase + lowercase + digits + special;
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < nbCar; i++) {
+            password.append(allcars.charAt(random.nextInt(allcars.length())));
+        }
+
+        List<Character> passwordChars = new ArrayList<>();
+        for (char c : password.toString().toCharArray()) {
+            passwordChars.add(c);
+        }
+        Collections.shuffle(passwordChars);
+
+        StringBuilder shuffledPassword = new StringBuilder(nbCar);
+        for (char c : passwordChars) {
+            shuffledPassword.append(c);
+        }
+
+        return shuffledPassword.toString();
     }
+        
 
     public static void main(String[] args) {
         if (args.length == 0) {
