@@ -6,14 +6,33 @@ import java.util.Scanner;
 
 public class Login {
     public static void main(String[] args) {
-        HashMap<String, String> userDatabase = loadUserDatabase("../data/user_hashpwd.csv");
+        HashMap<String, String> userDatabase = loadUserDatabase("tp1/data/user_hashpwd.csv");
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
 
-            // Code here
+            System.out.print("Enter username: ");
+            String username = scanner.nextLine();
+
+            if (userDatabase.containsKey(username)) {
+                System.out.print("Enter password: ");
+                String password = scanner.nextLine();
+                String hashedPassword = Password.hashPassword(password);
+
+                if (hashedPassword.equals(userDatabase.get(username))) {
+                    System.out.println("Login successful!");
+                    break;
+                } else {
+                    System.out.println("Invalid password. Try again.");
+                }
+            } else {
+                System.out.println("Username not found. Try again.");
+            }
         }
+        scanner.close();
     }
+        
+    
 
     /**
      * Loads a user database from a CSV file.
