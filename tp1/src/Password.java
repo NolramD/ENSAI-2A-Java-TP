@@ -65,9 +65,28 @@ public class Password {
      */
     public static boolean isStrongPassword(String password) {
 
-        // Code here
+        if (password == null || password.length() < 12) {
+            return false;
+        }   
 
-        return false;
+        boolean hasUppercase = false;
+        boolean hasLowercase = false;
+        boolean hasDigit = false;
+        boolean hasWhitespace = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLowercase = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else if (Character.isWhitespace(c)) {
+                hasWhitespace = true;
+            }
+        }
+
+        return hasUppercase && hasLowercase && hasDigit && !hasWhitespace;
     }
 
     /**
@@ -80,7 +99,7 @@ public class Password {
      */
     public static HashMap<String, Boolean> checkPasswordsList(ArrayList<String> passwords) {
 
-        // Code here
+        
 
         return null;
     }
