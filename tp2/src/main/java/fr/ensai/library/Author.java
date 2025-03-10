@@ -13,12 +13,10 @@ public class Author {
     private String nationality;
 
     /**
-     * Constructs a new Book object.
+     * Constructs a new Author object.
      */
-    public Author(String name, int age, String nationality) {
+    public Author(String name) {
         this.name = name;
-        this.age = age;
-        this.nationality = nationality;
     }
 
     public String getName() {
