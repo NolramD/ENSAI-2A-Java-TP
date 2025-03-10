@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,28 +13,85 @@ import java.util.Map;
 public class Library {
     
     private String name;
-    private List<Book> books;
+    private List<Item> items;
+    private List<Loan> activeLoans;
+    private List<Loan> completedLoans;
 
 
-    public Library(String name, List<Book> books) {
+    public Library(String name, List<Item> items) {
         this.name = name;
-        this.books = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
-    public void addIem(Book book) {
-        this.books.add(book);
+    public void addIem(Item item) {
+        this.items.add(item);
     }
 
-    public void displayBooks() {
-        if (books.isEmpty()) {
-            System.out.println("No books available in the library.");
+    public void displayItems() {
+        if (items.isEmpty()) {
+            System.out.println("No items available in the library.");
         } else {
-            System.out.println("Books in " + name + " Library:");
-            for (Book book : books) {
-                System.out.println(book); // Uses Book's toString() method
+            System.out.println("Items in " + name + " Library:");
+            for (Item item : items) {
+                System.out.println(item); // Uses Book's toString() method
             }
         }
     }
+
+    public Loan findActiveLoanForItem(Item item) {
+        for (Loan loan : activeLoans) {
+            if (loan.getItem().equals(item)) {
+                return loan;
+            }
+        }
+        return null; // No active loan found for the item
+    }
+
+    // Method to get books by author
+    public ArrayList<Book> getBooksByAuthor(Author author) {
+        ArrayList<Book> booksByAuthor = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthor().equals(author)) {
+                booksByAuthor.add(book);
+            }
+        }
+        return booksByAuthor;
+    }
+
+    // Method to loan an item to a student
+    public boolean loanItem(Item item, Student student) {
+        Loan activeLoan = findActiveLoanForItem(item);
+        if (activeLoan == null) {
+            Loan newLoan = new Loan(student, item, LocalDate.now());
+            activeLoans.add(newLoan);
+            return true; // Loan successful
+        }
+        return false; // Item is already loaned out
+    }
+
+    // Method to render an item (return it)
+    public boolean renderItem(Item item) {
+        Loan activeLoan = findActiveLoanForItem(item);
+        if (activeLoan != null) {
+            activeLoan.setReturnDate(LocalDate.now());
+            activeLoans.remove(activeLoan);
+            completedLoans.add(activeLoan);
+            return true; // Item returned successfully
+        }
+        return false; // No active loan found
+    }
+
+    // Method to display active loans
+    public void displayActiveLoans() {
+        if (activeLoans.isEmpty()) {
+            System.out.println("No active loans.");
+        } else {
+            for (Loan loan : activeLoans) {
+                loan.displayLoanInfo();
+            }
+        }
+    }
+
 
     /**
      * Loads books from a CSV file and adds them to the library.
